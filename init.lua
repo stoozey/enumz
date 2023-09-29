@@ -16,8 +16,10 @@ type SerializedEnumz = {
 local Enumz = { };
 
 Enumz.__index = function(self, key)
-	if (key == "Iterator") then
-		return self.__valuesIndexed;
+	if (key == "Iterate") then
+		return function()
+			return self.__valuesIndexed;
+		end
 	elseif (key == "Count") then
 		return #self.__valuesIndexed;
 	elseif (key == "Random") then
@@ -81,7 +83,7 @@ local EnumzManager = { };
 local EnumzCache = { };
 
 function EnumzManager.Create(name: string, values: {string}): Enumz
-	assert(Enumz.Exists(name), ("Enum with name %s already exists"):format(name));
+	assert((not EnumzManager.Exists(name)), ("Enum with name %s already exists"):format(name));
 
 	local enumz = Enum.new(name, values);
 	EnumzCache[name] = enumz;
@@ -102,6 +104,10 @@ function EnumzManager.GetFromSerialized(serializedEnumz: SerializedEnumz): Enumz
 
 	local enumName = serializedEnumz["_EN"];
 	return EnumzManager.Get(enumName);
+end
+
+function EnumzManager.Exists(name: string): boolean
+	return (EnumzCache[name] ~= nil);
 end
 
 return EnumzManager;
