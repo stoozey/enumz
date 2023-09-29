@@ -1,19 +1,6 @@
-export type Enumz = {
-	["Iterator"]: {[number]: string},
-	["Count"]: number,
-	["Random"]: string,
-	["Name"]: string,
-	["ClassName"]: string,
-	["Serialize"]: () -> {},
-	["Exists"]: (value: string) -> boolean
-};
-
-export type SerializedEnumz = {
-	["_CN"]: "Enumz",
-	["_EN"]: string
-}
-
 local Enumz = { };
+
+local EnumzTypes = require(script.Parent:WaitForChild("enumz_types"));
 
 Enumz.__index = function(self, key)
 	if (key == "Iterate") then
@@ -33,7 +20,7 @@ Enumz.__index = function(self, key)
 	elseif (key == "ClassName") then
 		return self.__name;
 	elseif (key == "Serialized") then
-		return function(): SerializedEnumz
+		return function(): EnumzTypes.SerializedEnumz
 			return {
 				["_CN"] = "Enumz",
 				["_EN"] = self.__name
@@ -65,7 +52,7 @@ Enumz.__index = function(self, key)
 	return value;
 end
 
-function Enumz.new(name: string, values: {string}): Enumz
+function Enumz.new(name: string, values: {string}): EnumzTypes.Enumz
 	local self = setmetatable({ }, Enumz);
 
 	self.__name = name;
