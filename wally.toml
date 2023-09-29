@@ -1,8 +1,9 @@
 [package]
 name = "stoozey/enumz"
 description = "Enum system"
-version = "1.4.0"
+version = "1.5.0"
 registry = "https://github.com/upliftgames/wally-index"
 realm = "shared"
 
 [dependencies]
+promise = "evaera/promise@4.0.0"
