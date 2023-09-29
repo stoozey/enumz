@@ -1,7 +1,7 @@
 [package]
-name = "jo/enumz"
-version = "0.1.0"
-registry = "https://github.com/UpliftGames/wally-index"
+name = "stoozey/enumz"
+version = "1.0.0"
+registry = "https://github.com/stoozey/Enumz"
 realm = "shared"
 
 [dependencies]
