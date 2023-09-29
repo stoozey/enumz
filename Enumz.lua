@@ -19,7 +19,7 @@ Enumz.__index = function(self, key)
 		return "Enumz";
 	elseif (key == "ClassName") then
 		return self.__name;
-	elseif (key == "Serialized") then
+	elseif (key == "Serialize") then
 		return function(): EnumzTypes.SerializedEnumz
 			return {
 				["_CN"] = "Enumz",
@@ -48,7 +48,7 @@ Enumz.__index = function(self, key)
 		value = self.__valuesNamed[key];
 	end
 
-	assert(value, ("Enum %s does not have a value matching %s"):format(string(self.__name), string(key)));
+	assert(value, ("Enum %s does not have a value matching %s"):format(self.__name, key));
 	return value;
 end
 

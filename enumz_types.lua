@@ -1,7 +1,7 @@
 local EnumzTypes = { };
 
 export type Enumz = {
-	["Iterator"]: {[number]: string},
+	["Iterate"]: () -> {[number]: string},
 	["Count"]: number,
 	["Random"]: string,
 	["Name"]: string,
