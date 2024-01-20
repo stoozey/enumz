@@ -1,7 +1,8 @@
 export type EnumzClass = {
 	GetEnumItems: (self: EnumzClass) -> {[number]: string},
 	GetRandom: (self: EnumzClass) -> number,
-	GetName: (self: EnumzClass) -> string
+	GetName: (self: EnumzClass) -> string,
+	GetTotalItems: (self: EnumzClass) -> number,
 };
 
 local mt = {
@@ -12,6 +13,8 @@ local mt = {
 			return self.__getRandom;
 		elseif (key == "GetName") then
 			return self.__getName;
+		elseif (key == "GetTotalItems") then
+			return self.__getTotalItems;
 		else
 			local keyType = typeof(key);
 			if (keyType == "string") then
@@ -59,6 +62,10 @@ function EnumzClass.new(name: string, values: {string}): EnumzClass
 		return self.__name;
 	end
 	
+	self.__getTotalItems = function()
+		return #self.__valuesIndexed;
+	end
+
 	return setmetatable(self, mt);
 end
 
