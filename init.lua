@@ -1,4 +1,4 @@
-local EnumzClass = require(script.Parent:WaitForChild("enumz"));
+local EnumzClass = require(script:WaitForChild("enumz"));
 
 export type EnumzClass = EnumzClass.EnumzClass;
 
