@@ -1,69 +1,65 @@
-local Enumz = { };
+export type EnumzClass = {
+	GetEnumItems: (self: EnumzClass) -> {[number]: string},
+	GetRandom: (self: EnumzClass) -> number,
+	GetName: (self: EnumzClass) -> string
+};
 
-local EnumzTypes = require(script.Parent:WaitForChild("enumz_types"));
-
-Enumz.__index = function(self, key)
-	if (key == "Iterate") then
-		return function()
-			return self.__valuesIndexed;
-		end
-	elseif (key == "Count") then
-		return #self.__valuesIndexed;
-	elseif (key == "Random") then
-		local count = #self.__valuesIndexed;
-		local index = ((count == 1) and 1 or math.random(1, count));
-		return self.__valuesIndexed[index];
-	elseif (key == "Name") then
-		return self.__name;
-	elseif (key == "ClassType") then
-		return "Enumz";
-	elseif (key == "ClassName") then
-		return self.__name;
-	elseif (key == "Serialize") then
-		return function(): EnumzTypes.SerializedEnumz
-			return {
-				["_CN"] = "Enumz",
-				["_EN"] = self.__name
-			};
-		end
-	elseif (key == "Exists") then
-		return function(value: string|number)
-			local valueType = typeof(value);
-			assert(((valueType == "string") or (valueType == "number")), ("Invalid value type \"%s\""):format(valueType));
-
-			if (valueType == "string") then
-				return (self.__valuesNamed[value] ~= nil);
-			elseif (valueType == "number") then
-				return (self.__valuesIndexed[value] ~= nil);
+local mt = {
+	__index = function(self, key)
+		if (key == "GetEnumItems") then
+			return self.__getEnumItems;
+		elseif (key == "GetRandom") then
+			return self.__getRandom;
+		elseif (key == "GetName") then
+			return self.__getName;
+		else
+			local keyType = typeof(key);
+			if (keyType == "string") then
+				return self.__valuesNamed[key];
+			elseif (keyType == "number") then
+				return self.__valuesIndexed[key];
 			end
-
-			return false;
 		end
-	end
+		
+		error("invalid enumz index");
+	end,
+	
+	__newindex = function(self, key, value)
+		error("enumz is a read-only value");
+	end,
+};
 
-	local value;
-	if (typeof(key) == "number") then
-		value = self.__valuesIndexed[key];
-	else
-		value = self.__valuesNamed[key];
-	end
 
-	assert(value, ("Enum %s does not have a value matching %s"):format(self.__name, key));
-	return value;
-end
+local EnumzClass = { };
 
-function Enumz.new(name: string, values: {string}): EnumzTypes.Enumz
-	local self = setmetatable({ }, Enumz);
-
+function EnumzClass.new(name: string, values: {string}): EnumzClass
+	local self = { };
+	
+	-- setup values
 	self.__name = name;
-	self.__valuesIndexed = { };
-	self.__valuesNamed = { };
-	for i, value in pairs(values) do
-		self.__valuesIndexed[i] = value;
-		self.__valuesNamed[value] = i;
+	self.__valuesIndexed = values;
+	
+	local valuesNamed = { };
+	for index, value in pairs(values) do
+		valuesNamed[value] = index;
 	end
-
-	return self;
+	
+	self.__valuesNamed = valuesNamed;
+	
+	-- define functions
+	self.__getEnumItems = function()
+		return table.clone(self.__valuesIndexed);
+	end
+	
+	self.__getRandom = function()
+		return self.__valuesIndexed[math.random(1, #self.__valuesIndexed)];
+	end
+	
+	self.__getName = function()
+		return self.__name;
+	end
+	
+	return setmetatable(self, mt);
 end
 
-return Enumz;
+return EnumzClass;
