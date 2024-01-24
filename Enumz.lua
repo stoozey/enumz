@@ -43,7 +43,8 @@ function EnumzClass.new(name: string, values: {string}): EnumzClass
 	self.__valuesIndexed = values;
 	
 	local valuesNamed = { };
-	for index, value in pairs(values) do
+	for index, value in ipairs(values) do
+		assert((typeof(value) == "string"), ("non-string key given to enum %s"):format(name));
 		valuesNamed[value] = index;
 	end
 	

@@ -11,8 +11,10 @@ local mt = {
 	end,
 	
 	__newindex = function(self, key: string, values: {string})
+		assert((typeof(key) == "string"), "enum name is not a string");
+		assert((key ~= ""), "enum name cannot be empty");
 		assert((not self.__classes[key]), "enum already exists");
-		assert((typeof(values) == "table"), "not a table");
+		assert((typeof(values) == "table"), "value is not a table");
 		
 		local enum = EnumzClass.new(key, values);
 		self.__classes[key] = enum;
