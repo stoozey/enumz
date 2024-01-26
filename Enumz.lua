@@ -16,12 +16,16 @@ local mt = {
 		elseif (key == "GetTotalItems") then
 			return self.__getTotalItems;
 		else
+			local value;
 			local keyType = typeof(key);
 			if (keyType == "string") then
-				return self.__valuesNamed[key];
+				value = self.__valuesNamed[key];
 			elseif (keyType == "number") then
-				return self.__valuesIndexed[key];
+				value = self.__valuesIndexed[key];
 			end
+
+			assert((value ~= nil), ("enum \"%s\" does not have a value corresponding to %s!"):format(self:GetName(), key));
+			return value;
 		end
 		
 		error("invalid enumz index");
