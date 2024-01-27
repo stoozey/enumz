@@ -3,6 +3,7 @@ export type EnumzClass = {
 	GetRandom: (self: EnumzClass) -> number,
 	GetName: (self: EnumzClass) -> string,
 	GetTotalItems: (self: EnumzClass) -> number,
+	Validate: (self: EnumzClass, valueOrIndex: string|number, doAssertion: boolean|nil) -> boolean,
 };
 
 local mt = {
@@ -15,6 +16,8 @@ local mt = {
 			return self.__getName;
 		elseif (key == "GetTotalItems") then
 			return self.__getTotalItems;
+		elseif (key == "Validate") then
+			return self.__validate;
 		else
 			local value;
 			local keyType = typeof(key);
@@ -55,20 +58,38 @@ function EnumzClass.new(name: string, values: {string}): EnumzClass
 	self.__valuesNamed = valuesNamed;
 	
 	-- define functions
-	self.__getEnumItems = function()
+	function self:__getEnumItems()
 		return table.clone(self.__valuesIndexed);
 	end
 	
-	self.__getRandom = function()
+	function self:__getRandom()
 		return self.__valuesIndexed[math.random(1, #self.__valuesIndexed)];
 	end
 	
-	self.__getName = function()
+	function self:__getName()
 		return self.__name;
 	end
 	
-	self.__getTotalItems = function()
+	function self:__getTotalItems()
 		return #self.__valuesIndexed;
+	end
+
+	function self:__validate(valueOrIndex: string|number, doAssertion: boolean|nil)
+		local valid;
+		local valueType = typeof(valueOrIndex);
+		if (valueType == "string") then
+			valid = (self.__valuesNamed[valueOrIndex] ~= nil);
+		elseif (valueType == "number") then
+			valid = (self.__valuesIndexed[valueOrIndex] ~= nil);
+		else
+			error(("invalid %s:Validate value given, expected string|number, got %s"):format(valueType));
+		end
+
+		if (doAssertion) then
+			assert(valid, ("value %s is not valid within %s enum!"):format(valueOrIndex, self:__getName()));
+		end
+
+		return valid;
 	end
 
 	return setmetatable(self, mt);
