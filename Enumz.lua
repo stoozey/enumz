@@ -63,7 +63,7 @@ function EnumzClass.new(name: string, values: {string}): EnumzClass
 	end
 	
 	function self:__getRandom()
-		return self.__valuesIndexed[math.random(1, #self.__valuesIndexed)];
+		return self.__valuesNamed[self.__valuesIndexed[math.random(1, #self.__valuesIndexed)]];
 	end
 	
 	function self:__getName()
