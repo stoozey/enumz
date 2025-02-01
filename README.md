@@ -1,7 +1,7 @@
 # Enumz
 Enum system for Roblox
  
-You can install this package using [wally](https://wally.run/package/stoozey/enumz?version=1.6.0)
+You can install this package using [wally](https://wally.run/package/stoozey/enumz)
 
 ## Usage Guide
 Enumz is very simple to use--require the module and create your enum as you would a regular table:
