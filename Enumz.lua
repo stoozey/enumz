@@ -4,6 +4,7 @@ export type EnumzClass = {
 	GetName: (self: EnumzClass) -> string,
 	GetTotalItems: (self: EnumzClass) -> number,
 	Validate: (self: EnumzClass, valueOrIndex: string|number, doAssertion: boolean|nil) -> boolean,
+	[string|number]: number|string
 };
 
 local mt = {
