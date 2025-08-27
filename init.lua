@@ -2,10 +2,19 @@ local EnumzClass = require(script:WaitForChild("enumz"));
 
 export type EnumzClass = EnumzClass.EnumzClass;
 
+local function EnumExists(self, keyToCheck: string): boolean
+	local enum = self.__classes[keyToCheck];
+	return (enum ~= nil);
+end
+
 local mt = {
 	__index = function(self, key: string): {[any]: EnumzClass.EnumzClass}
+		if (key == "Exists") then
+			return EnumExists;
+		end
+		
 		local enum = self.__classes[key];
-		assert(enum, "enum does not exist");
+		assert(enum, `enum {key} does not exist`);
 
 		return enum;
 	end,
@@ -18,7 +27,7 @@ local mt = {
 		
 		local enum = EnumzClass.new(key, values);
 		self.__classes[key] = enum;
-	end
+	end,
 };
 
 local Enumz: { [string]: EnumzClass.EnumzClass } = {
