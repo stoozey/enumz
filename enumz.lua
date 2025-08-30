@@ -77,10 +77,21 @@ function EnumzClass.new(name: string, values: {string}): EnumzClass
 		return #self.__valuesIndexed;
 	end
 
-	function self:__createTable(valueGenerator: (number) -> any)
+	function self:__createTable(value: {}|((number) -> any)|any)
+		local function GetValue(i)
+			local valueType = typeof(value);
+			if (valueType == "function") then
+				return value(i);
+			elseif (valueType == "table") then
+				return table.clone(value);
+			else
+				return value;
+			end
+		end
+
 		local tbl = { };
 		for i = 1, #self.__valuesIndexed do
-			tbl[i] = valueGenerator(i);
+			tbl[i] = GetValue(i);
 		end
 
 		return tbl;
