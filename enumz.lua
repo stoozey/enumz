@@ -17,6 +17,8 @@ local mt = {
 			return self.__getName;
 		elseif (key == "GetTotalItems") then
 			return self.__getTotalItems;
+		elseif (key == "CreateTable") then
+			return self.__createTable;
 		elseif (key == "Validate") then
 			return self.__validate;
 		else
@@ -73,6 +75,15 @@ function EnumzClass.new(name: string, values: {string}): EnumzClass
 	
 	function self:__getTotalItems()
 		return #self.__valuesIndexed;
+	end
+
+	function self:__createTable(valueGenerator: (number) -> any)
+		local tbl = { };
+		for i = 1, #self.__valuesIndexed do
+			tbl[i] = valueGenerator(i);
+		end
+
+		return tbl;
 	end
 
 	function self:__validate(valueOrIndex: string|number, doAssertion: boolean|nil)
