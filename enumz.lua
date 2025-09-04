@@ -21,6 +21,8 @@ local mt = {
 			return self.__createTable;
 		elseif (key == "Validate") then
 			return self.__validate;
+		elseif (key == "First") then
+			return self.__first;
 		else
 			local value;
 			local keyType = typeof(key);
@@ -113,6 +115,10 @@ function EnumzClass.new(name: string, values: {string}): EnumzClass
 		end
 
 		return valid;
+	end
+
+	function self:__first()
+		return 1;
 	end
 
 	return setmetatable(self, mt);
