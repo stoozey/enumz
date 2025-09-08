@@ -32,7 +32,7 @@ local mt = {
 				value = self.__valuesIndexed[key];
 			end
 
-			assert((value ~= nil), ("enum \"%s\" does not have a value corresponding to %s!"):format(self:GetName(), key));
+			assert((value ~= nil), ("enum \"%s\" does not have a value corresponding to %s!"):format(self:GetName(), tostring(key)));
 			return value;
 		end
 		
@@ -107,11 +107,11 @@ function EnumzClass.new(name: string, values: {string}): EnumzClass
 		elseif (valueType == "number") then
 			valid = (self.__valuesIndexed[valueOrIndex] ~= nil);
 		else
-			error(("invalid %s:Validate value given, expected string|number, got %s"):format(valueType));
+			error(("invalid %s:Validate value given, expected string|number, got %s"):format(self:__getName(), tostring(valueType)));
 		end
 
 		if (doAssertion) then
-			assert(valid, ("value %s is not valid within %s enum!"):format(valueOrIndex, self:__getName()));
+			assert(valid, ("value %s is not valid within %s enum!"):format(tostring(valueOrIndex), self:__getName()));
 		end
 
 		return valid;
