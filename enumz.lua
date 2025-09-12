@@ -1,21 +1,24 @@
 export type EnumzClass = {
 	GetEnumItems: (self: EnumzClass) -> {[number]: string},
+	Pairs: (self: EnumzClass) -> {[number]: string},
 	GetRandom: (self: EnumzClass) -> number,
 	GetName: (self: EnumzClass) -> string,
 	GetTotalItems: (self: EnumzClass) -> number,
+	Count: (self: EnumzClass) -> number,
+	Last: (self: EnumzClass) -> number,
 	Validate: (self: EnumzClass, valueOrIndex: string|number, doAssertion: boolean|nil) -> boolean,
 	[string|number]: number|string
 };
 
 local mt = {
 	__index = function(self, key)
-		if (key == "GetEnumItems") then
+		if ((key == "GetEnumItems") or (key == "Pairs")) then
 			return self.__getEnumItems;
 		elseif (key == "GetRandom") then
 			return self.__getRandom;
 		elseif (key == "GetName") then
 			return self.__getName;
-		elseif (key == "GetTotalItems") then
+		elseif ((key == "GetTotalItems") or (key == "Count") or (key == "Last")) then
 			return self.__getTotalItems;
 		elseif (key == "CreateTable") then
 			return self.__createTable;
