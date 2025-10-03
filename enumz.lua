@@ -6,8 +6,10 @@ export type EnumzClass = {
 	GetTotalItems: (self: EnumzClass) -> number,
 	Count: (self: EnumzClass) -> number,
 	Last: (self: EnumzClass) -> number,
+	CreateTable: (self: EnumzClass, value: {}|((number) -> any)|any) -> {any},
 	Validate: (self: EnumzClass, valueOrIndex: string|number, doAssertion: boolean|nil) -> boolean,
-	[string|number]: number|string
+	[string|number]: number|string,
+	First: (self: EnumzClass) -> number,
 };
 
 local mt = {
