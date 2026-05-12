@@ -112,7 +112,7 @@ function EnumzClass.new(name: string, values: {string}): EnumzClass
 		elseif (valueType == "number") then
 			valid = (self.__valuesIndexed[valueOrIndex] ~= nil);
 		else
-			error(("invalid %s:Validate value given, expected string|number, got %s"):format(self:__getName(), tostring(valueType)));
+			valid = false;
 		end
 
 		if (doAssertion) then
