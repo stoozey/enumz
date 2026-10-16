@@ -7,31 +7,30 @@ local function EnumExists(self, keyToCheck: string): boolean
 	return (enum ~= nil);
 end
 
-local mt = {
-	__index = function(self, key: string): {[any]: EnumzClass.EnumzClass}
-		if (key == "Exists") then
-			return EnumExists;
-		end
-		
-		local enum = self.__classes[key];
-		assert(enum, `enum {key} does not exist`);
-
-		return enum;
+local lookup = setmetatable({ Exists = EnumExists }, {
+	__index = function(_, key: string)
+		error(`enum {key} does not exist`);
 	end,
-	
-	__newindex = function(self, key: string, values: {string})
-		assert((typeof(key) == "string"), "enum name is not a string");
-		assert((key ~= ""), "enum name cannot be empty");
-		assert((not self.__classes[key]), "enum already exists");
-		assert((typeof(values) == "table"), "value is not a table");
-		
-		local enum = EnumzClass.new(key, values);
-		self.__classes[key] = enum;
-	end,
-};
+});
 
 local Enumz: { [string]: EnumzClass.EnumzClass } = {
 	__classes = { }
 };
 
-return setmetatable(Enumz, mt);
+return setmetatable(Enumz, {
+	__index = lookup,
+
+	__newindex = function(self, key: string, values: {string})
+		if (type(key) ~= "string") then error("enum name is not a string"); end
+		if (key == "") then error("enum name cannot be empty"); end
+		if (self.__classes[key]) then error("enum already exists"); end
+		if (type(values) ~= "table") then error("value is not a table"); end
+
+		local enum = EnumzClass.new(key, values);
+		self.__classes[key] = enum;
+
+		if (key ~= "Exists") then
+			lookup[key] = enum;
+		end
+	end,
+});
